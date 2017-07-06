@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link href="https://fonts.googleapis.com/css?family=Oxygen|Righteous" rel="stylesheet">
+	<style>
+		body {
+			background-color: #f7ece3;
+		}
+		header {
+			background-color: black;
+			color: #f7ece3;
+			font-family: 'Oxygen', sans-serif;
+			font-size: 30px;
+			position: fixed;
+			width: 100%;
+			height: 120px;
+			top: 0;
+			left: 0;
+			padding-left: 30px;
+		}
+
+		.clock-area {
+			margin-top: 170px;
+			margin-left: 10px;
+			margin-bottom: 100px;
+			padding: 10px;
+			font-size: 50px;
+			font-family: 'Righteous', cursive;
+			max-height: 500px;
+			max-width: 500px;
+		}
+
+		.clock-area text {
+			stroke-width: .5px;
+		}
+
+		.modal-why {
+			visibility: hidden;
+			background-color: #dddddd;
+			position: fixed;
+			left: 0%;
+			top: 20%;
+			width:95%;
+			height:60%;
+			z-index: 1000;
+			margin: 10px;
+			padding: 10px;
+			font-size: 20px;
+			font-family: sans-serif;
+
+		}
+
+		.modal-why img {
+			border: .2px solid black;
+			margin-bottom: 10px;
+			margin-right: 10px;
+			float: left;
+		}
+
+		.modal-img-source {
+			float: left;
+			clear: both;
+			font-size: 14px;
+			font-family: monospace;
+		}
+
+		.modal-why-text {
+			margin-top: 10px;
+		}
+
+		.modal-time {
+			visibility: hidden;
+			background-color: #dddddd;
+			position: fixed;
+			left: 0%;
+			top: 20%;
+			width:95%;
+			height:60%;
+			z-index: 1000;
+			margin: 10px;
+			padding: 10px;
+			font-size: 30px;
+			text-align: center;
+			font-family: sans-serif;
+		}
+
+		.modal-time-text {
+			margin-top: 100px;
+		}
+
+		footer {
+			padding-top: 40px;
+			background-color: black;
+			position: fixed;
+			width: 100%;
+			height: 20px;
+			clear: both;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			padding: .5rem;
+			text-align: center;
+		}
+
+		footer div {
+			color: #f7ece3;
+			display: inline-block;
+			margin-right: 40px;
+			margin-left: 40px;
+			font-family: sans-serif;
+			font-size: 14px;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1>The Worst Clock</h1>
+	</header>
+	<div class="clock-area">
+		<svg width="500" height="550">
+			<text class="intro" x="190" y="40" fill="#e3408e" stroke="#e3408e">It is</text>
+			<text class="half-description" x="10" y="110" fill="none" stroke="black">Half</text>
+			<text class="ten-description" x="140" y="110" fill="none" stroke="black">Ten</text>
+			<text class="quarter-description" x="260" y="110" fill="none" stroke="black">a Quarter</text>
+			<text class="twenty-description" x="10" y="190" fill="none" stroke="black">Twenty</text>
+			<text class="five-description" x="200" y="190" fill="none" stroke="black">Five</text>
+			<text class="minutes-description" x="315" y="190" fill="none" stroke="black">Minutes</text>
+			<text class="to-description" x="10" y="265" fill="none" stroke="black">To</text>
+			<text class="past-description" x="100" y="265" fill="none" stroke="black">Past</text>
+			<text class="two-time" x="235" y="265" fill="none" stroke="black">Two</text>
+			<text class="three-time" x="360" y="265" fill="none" stroke="black">Three</text>
+			<text class="one-time" x="10" y="340" fill="none" stroke="black">One</text>
+			<text class="four-time" x="135" y="340" fill="none" stroke="black">Four</text>
+			<text class="five-time" x="270" y="340" fill="none" stroke="black">Five</text>
+			<text class="six-time" x="390" y="340" fill="none" stroke="black">Six</text>
+			<text class="seven-time" x="10" y="415" fill="none" stroke="black">Seven</text>
+			<text class="eight-time" x="175" y="415" fill="none" stroke="black">Eight</text>
+			<text class="nine-time" x="320" y="415" fill="none" stroke="black">Nine</text>
+			<text class="ten-time" x="10" y="490" fill="none" stroke="black">Ten</text>
+			<text class="eleven-time" x="130" y="490" fill="none" stroke="black">Eleven</text>
+			<text class="twelve-time" x="310" y="490" fill="none" stroke="black">Twelve</text>
+		</svg>
+	</div>
+
+	<div class="modal-why">
+		<img src="original-clock.png" alt="photo of word clock">
+		<div class="modal-img-source"> Source: Amazon.com</div>
+		<div class="modal-why-text">
+		I saw this product on Amazon.com. At first, I laughed. Clocks are precise. This is not precise at all. Then, I decided it would be fun to build my own. It's still not a good clock.
+		</div>
+	</div>
+
+	<div class="modal-time">
+		<div class="modal-time-text">
+		The current time is
+		<div class="current-time"></div>
+		</div>
+	</div>
+
+	<footer>
+		<div tabindex="2" class="btn-why">Why does this exist?</div>
+		<div tabindex="2" class="btn-time">Okay, what time is it really?</div>
+	</footer>
+</body>
+<script>
+	//initially run through markings functionality based on current time
+	let initApp = function(){
+		let currentDate = new Date();
+
+		return getCurrentTime(currentDate);
+	} 
+
+	//repeat the markings functionality every minute to update clock
+	let repeatApp = window.setInterval(function(){
+		let currentDate = new Date();
+
+		return getCurrentTime(currentDate);
+	}, 60000);
+
+	//perform operations to find the current time
+	function getCurrentTime(date){
+		let currentDateString = date.toString();
+		let currentDateArr = currentDateString.split(" ");
+		let currentTime = currentDateArr[4];
+		let currentTimeArr = currentTime.split(":");
+		let currentHour = currentTimeArr[0];
+		let currentMinute = currentTimeArr[1];
+
+		return defineMinuteMark(currentMinute, currentHour);
+	}
+
+	//add correct markings to the markingsArr based on the current minute
+	function defineMinuteMark(minute, hour){
+		if(minute > 59){
+			handleClockError();
+		}
+		let zeroToFour = minute < 5;
+		let fiveToNine = (minute > 4) && (minute < 10);
+		let tenToFourteen = (minute > 9) && (minute < 15); 
+		let fifteenToNineteen = (minute > 14) && (minute < 20);
+		let twentyToTwentyNine = (minute > 19) && (minute < 30);
+		let thirtyToThirtyNine = (minute > 29) && (minute < 40);
+		let fortyToFortyFour = (minute > 39) && (minute < 45);
+		let fortyFiveToFortyNine = (minute > 44) && (minute < 50);
+		let fiftyToFiftyFour  = (minute > 49) && (minute < 55);
+		let fiftyFiveToFiftyNine = (minute > 54) && (minute < 60);
+
+		let minuteArr = [];
+		let currentHour = +hour;
+
+		let halfDescription = document.querySelector(".half-description");
+		let tenDescription = document.querySelector(".ten-description");
+		let quarterDescription = document.querySelector(".quarter-description");
+		let twentyDescription = document.querySelector(".twenty-description");
+		let fiveDescription = document.querySelector(".five-description");
+		let minutesDescription = document.querySelector(".minutes-description");
+		let toDescription = document.querySelector(".to-description");
+		let pastDescription = document.querySelector(".past-description");
+
+		switch(true){
+			case zeroToFour:
+				break;
+			case fiveToNine: 
+				minuteArr.push(fiveDescription);
+				minuteArr.push(minutesDescription);
+				minuteArr.push(pastDescription);
+				break;
+			case tenToFourteen:
+				minuteArr.push(tenDescription);
+				minuteArr.push(minutesDescription);
+				minuteArr.push(pastDescription);
+				break;
+			case fifteenToNineteen:
+				minuteArr.push(quarterDescription);
+				minuteArr.push(pastDescription);
+				break;
+			case twentyToTwentyNine:
+				minuteArr.push(twentyDescription);
+				minuteArr.push(minutesDescription);
+				minuteArr.push(pastDescription);
+				break;
+			case thirtyToThirtyNine:
+				minuteArr.push(halfDescription);
+				minuteArr.push(pastDescription);
+				break;
+			case fortyToFortyFour:
+				minuteArr.push(twentyDescription);
+				minuteArr.push(minutesDescription);
+				minuteArr.push(toDescription);
+				currentHour += 1;
+				break;
+			case fortyFiveToFortyNine:
+				minuteArr.push(quarterDescription);
+				minuteArr.push(toDescription);
+				currentHour += 1;
+				break;
+			case fiftyToFiftyFour:
+				minuteArr.push(tenDescription);
+				minuteArr.push(minutesDescription);
+				minuteArr.push(toDescription);
+				currentHour += 1;
+				break;
+			case fiftyFiveToFiftyNine:
+				minuteArr.push(fiveDescription);
+				minuteArr.push(minutesDescription);
+				minuteArr.push(toDescription);
+				currentHour += 1;
+				break;
+		}
+
+		return defineHourMark(minuteArr, currentHour);
+
+	}
+
+	//add correct svg text elements to the markingsArr based on the current hour
+	function defineHourMark(markingsArr, hour){
+		if(hour > 26){
+			handleClockError();
+		} else if (hour === 25){
+			hour = 1;
+		} else if (hour > 12){
+			hour = hour - 12;
+		}
+
+		switch(hour){
+			case 1:
+				markingsArr.push(document.querySelector(".one-time"));
+				break;
+			case 2:
+				markingsArr.push(document.querySelector(".two-time"));
+				break;
+			case 3: 
+				markingsArr.push(document.querySelector(".three-time"));
+				break;
+			case 4:
+				markingsArr.push(document.querySelector(".four-time"));
+				break;
+			case 5:
+				markingsArr.push(document.querySelector(".five-time"));
+				break;
+			case 6:
+				markingsArr.push(document.querySelector(".six-time"));
+				break;
+			case 7:
+				markingsArr.push(document.querySelector(".seven-time"));
+				break;
+			case 8:
+				markingsArr.push(document.querySelector(".eight-time"));
+				break;
+			case 9:
+				markingsArr.push(document.querySelector(".nine-time"));
+				break;
+			case 10:
+				markingsArr.push(document.querySelector(".ten-time"));
+				break;
+			case 11:
+				markingsArr.push(document.querySelector(".eleven-time"));
+				break;
+			case 12:
+				markingsArr.push(document.querySelector(".twelve-time"));
+				break;
+		}
+
+
+		return changeClockMarkings(markingsArr);
+	}
+
+	//changes fill and outline based on what elements are in the markingsArr
+	function changeClockMarkings(markingsArr){
+		removePreviousMarkings();
+
+		for(let i = 0; i < markingsArr.length; i++){
+			markingsArr[i].setAttribute("fill", "#e3408e");
+			markingsArr[i].setAttribute("stroke", "#e3408e");
+		}
+
+		return repeatApp;
+	}
+
+	//removes previous fill and outline from svg text
+	function removePreviousMarkings(){
+		let clockAreaText = document.querySelectorAll("text");
+
+		for(let i = 1; i < clockAreaText.length; i++){
+			clockAreaText[i].setAttribute("fill", "none");
+			clockAreaText[i].setAttribute("stroke", "black");
+		}
+
+	}
+
+	function handleClockError(){
+		//you should add a 404 type page or redirect
+		console.log("Something went wrong");
+	}
+
+
+	//events for footer buttons
+	document.querySelector(".btn-why").addEventListener("click", function(){
+		return makeWhyVisible();
+	});
+	document.querySelector(".btn-why").addEventListener("touchstart", function(){
+		return makeWhyVisible();
+	});
+	document.querySelector(".btn-why").addEventListener("keyup", function(evt){
+		if(evt.which === 13){
+			return makeWhyVisible();
+		}
+	});
+
+
+	document.querySelector(".modal-why").addEventListener("click", function(){
+		return makeWhyVisible();
+	});
+	document.querySelector(".modal-why").addEventListener("touchstart", function(){
+		return makeWhyVisible();
+	});
+	document.querySelector(".modal-why").addEventListener("keyup", function(evt){
+		if(evt.which === 13){
+			return makeWhyVisible();
+		}
+	});
+
+	document.querySelector(".btn-time").addEventListener("click", function(){
+		return makeTimeVisible();
+	});
+	document.querySelector(".btn-time").addEventListener("touchstart", function(){
+		return makeTimeVisible();
+	});
+	document.querySelector(".btn-time").addEventListener("keyup", function(evt){
+		if(evt.which === 13){
+			return makeTimeVisible();
+		}
+	});
+
+	document.querySelector(".modal-time").addEventListener("click", function(){
+		return makeTimeVisible();
+	});
+	document.querySelector(".modal-time").addEventListener("touchstart", function(){
+		return makeTimeVisible();
+	});
+	document.querySelector(".modal-time").addEventListener("keyup", function(evt){
+		if(evt.which === 13){
+			return makeTimeVisible();
+		}
+	});
+
+	//makes why does this exist footer visible or invisible
+	function makeWhyVisible(){
+		let whyModal = document.querySelector(".modal-why");
+		whyModal.style.visibility = (whyModal.style.visibility == "visible") ? "hidden" : "visible";
+
+	}
+
+	//makes what time is it footer visible or invisible
+	function makeTimeVisible(){
+		let timeModal = document.querySelector(".modal-time");
+		timeModal.style.visibility = (timeModal.style.visibility == "visible") ? "hidden" : "visible";
+		return setCurrentTime();
+	}
+
+	//calculates and appends the current tiem to the time modal window
+	function setCurrentTime(){
+		let thisTime = new Date();
+
+		let currentDateString = thisTime.toString();
+		let currentDateArr = currentDateString.split(" ");
+		let currentTime = currentDateArr[4];
+		let currentTimeArr = currentTime.split(":");
+		let currentHour = currentTimeArr[0];
+		let currentMinute = currentTimeArr[1];
+		let formatHour;
+
+		if (currentHour > 12){
+			formatHour = currentHour - 12;
+		}
+
+		let finalTimeFormat = formatHour + ":" + currentMinute; 
+
+		let currentTimeDiv = document.querySelector(".current-time");
+		currentTimeDiv.textContent = finalTimeFormat; 
+
+	}
+
+	initApp();
+</script>
+</html>
