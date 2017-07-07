@@ -149,7 +149,7 @@
 		<img src="original-clock.png" alt="photo of word clock">
 		<div class="modal-img-source"> Source: Amazon.com</div>
 		<div class="modal-why-text">
-		I saw this product on Amazon.com. At first, I laughed. Clocks are precise. This is not precise at all. Then, I decided it would be fun to build my own. It's still not a good clock.
+		I saw this product on Amazon.com. At first, I laughed. Clocks are precise. This is not precise at all. Then, I decided it would be fun to build my own. It is still not a good clock.
 		</div>
 	</div>
 
@@ -283,6 +283,8 @@
 			hour = 1;
 		} else if (hour > 12){
 			hour = hour - 12;
+		} else if (hour === 0){
+			hour = 12;
 		}
 
 		switch(hour){
@@ -433,8 +435,12 @@
 		let currentMinute = currentTimeArr[1];
 		let formatHour;
 
+		//afternoon hours may use 24 hour days
 		if (currentHour > 12){
 			formatHour = currentHour - 12;
+		//12am may show up as 0 using new Date()
+		} else if (+currentHour === 0){
+			formatHour = 12;
 		}
 
 		let finalTimeFormat = formatHour + ":" + currentMinute; 
