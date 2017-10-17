@@ -3,7 +3,7 @@ let initApp = function(){
 	let currentDate = new Date();
 
 	return getCurrentTime(currentDate);
-} 
+}; 
 
 //repeat the markings functionality every minute to update clock
 let repeatApp = window.setInterval(function(){
@@ -55,7 +55,7 @@ function defineMinuteMark(minute, hour){
 	switch(true){
 		case zeroToFour:
 			break;
-		case fiveToNine: 
+		case fiveToNine:
 			minuteArr.push(fiveDescription);
 			minuteArr.push(minutesDescription);
 			minuteArr.push(pastDescription);
@@ -126,7 +126,7 @@ function defineHourMark(markingsArr, hour){
 		case 2:
 			markingsArr.push(document.querySelector(".two-time"));
 			break;
-		case 3: 
+		case 3:
 			markingsArr.push(document.querySelector(".three-time"));
 			break;
 		case 4:
@@ -191,7 +191,7 @@ function handleClockError(){
 }
 
 
-
+/* Modal Window Events */
 window.setTimeout(function(){
 //events for footer buttons
 document.querySelector(".btn-why").addEventListener("click", function(){
@@ -280,10 +280,10 @@ function setCurrentTime(){
 		formatHour = +currentHour;
 	}
 
-	let finalTimeFormat = formatHour + ":" + currentMinute; 
+	let finalTimeFormat = formatHour + ":" + currentMinute;
 
 	let currentTimeDiv = document.querySelector(".current-time");
-	currentTimeDiv.textContent = finalTimeFormat; 
+	currentTimeDiv.textContent = finalTimeFormat;
 }
 
 initApp();
